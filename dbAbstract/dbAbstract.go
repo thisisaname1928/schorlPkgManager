@@ -1,11 +1,17 @@
 package dbabstract
 
 import (
+	"Schorl/SchorlPackageManager/utils"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 
 	_ "github.com/mattn/go-sqlite3"
+)
+
+const (
+	ERROR_FILE_NOT_CREATED = "ERROR_FILE_NOT_CREATED"
 )
 
 type DBAbstract struct {
@@ -13,6 +19,10 @@ type DBAbstract struct {
 }
 
 func (dbAbs *DBAbstract) Open(path string) error {
+	if !utils.IsFileExist(path) {
+		return errors.New(ERROR_FILE_NOT_CREATED)
+	}
+
 	var e error
 	dbAbs.DB, e = sql.Open("sqlite3", path)
 

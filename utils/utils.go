@@ -10,3 +10,12 @@ func GetRealPath(path string) string {
 
 	return realPath
 }
+
+func IsFileExist(path string) bool {
+	_, e := os.Stat(path)
+	if os.IsNotExist(e) {
+		return false
+	}
+
+	return true
+}

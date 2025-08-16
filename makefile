@@ -5,7 +5,7 @@ $(OUTPUT): ./SchorlPackageManager
 	@cp $< $@
 
 run: $(OUTPUT)
-	@$<
+	@$< init
 
 ./SchorlPackageManager: $(GO_SRC)
 	@echo "Building..."
