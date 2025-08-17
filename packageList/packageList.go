@@ -65,6 +65,25 @@ func InitPackageList() error {
 		}
 	}
 
+	// check if there is a schorlPackageTable
+	shouldCreateTab = false
+	res, e = db.Query("select * from schorlPackageTable;")
+
+	if e == nil {
+		if !res.Next() {
+			shouldCreateTab = true
+		}
+	} else {
+		shouldCreateTab = true
+	}
+
+	if shouldCreateTab {
+		_, e = db.Exec(global.SchorlPackageTableDB)
+		if e != nil {
+			fmt.Printf("error: %v\n", e)
+		}
+	}
+
 	defer db.Close()
 	return nil
 }

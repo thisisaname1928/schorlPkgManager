@@ -11,6 +11,7 @@ var Prefix string = "/"
 var ExecutablePath = ""
 var AppDataPath = ""
 var CurrentRevision = 1
+var CurrentversionString = "alpha1"
 
 var LockFile *os.File
 
@@ -21,3 +22,26 @@ const (
 var SchorlPMInfoTableDB string = fmt.Sprintf(`create table if not exists schorlPMInfoTable(revision int);
 insert into schorlPMInfoTable values (%v);
 `, CurrentRevision)
+
+// create and add it self to packageList.db
+var SchorlPackageTableDB string = fmt.Sprintf(`
+create table if not exists schorlPackageTable (
+	SPMRevision int,
+	packageIdentifier text,
+	packageUniqueID not null primary key,
+	packageName text,
+	versionString text,
+	versionInt int,
+	packageType text
+);
+
+insert into schorlPackageTable values (
+	%v, 
+	"org.schorl.spm",  
+	"org.schorl.spm@%v", 
+	"Schorl Package Manager", 
+	"%v", 
+	%v, 
+	"sysapp"
+);
+`, CurrentRevision, CurrentversionString, CurrentversionString, CurrentRevision)

@@ -1,0 +1,11 @@
+{
+    "SPMRevision": 1,
+    "SPMExtension": "default",
+    "packageIdentifier": "com.example.test",
+    "packageName": "Example Package",
+    "packageDescription": "This is a example package!",
+    "packageAuthor": "ngqt",
+    "versionString": "1.0.0",
+    "versionInt": 1,
+    "packageType": "app"
+}

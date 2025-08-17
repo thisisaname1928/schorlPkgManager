@@ -19,7 +19,7 @@ func createWorkLock() error {
 	}
 
 	var e error
-	global.LockFile, e = os.Create(lockPath)
+	global.LockFile, e = os.Create(lockPath) // should create lock.txt with root only
 
 	return e
 }
@@ -47,13 +47,6 @@ func main() {
 	tmp = string(textRune) + "../appData/"
 	global.AppDataPath = tmp
 
-	// create work lock
-	e = createWorkLock()
-	if e != nil {
-		return
-	}
-	defer deleteWorkLock()
-
 	// get the first agrument
 	i := 1
 	for i < len(os.Args) {
@@ -76,6 +69,21 @@ func main() {
 		return
 	}
 
+	// delete work lock should be here
+	if os.Args[i] == "purge" {
+		// do somethings
+		deleteWorkLock()
+		return
+	}
+
+	// create work lock
+	e = createWorkLock()
+	if e != nil {
+		return
+	}
+	defer deleteWorkLock()
+
+	// handle command
 	if os.Args[i] == "init" {
 		fmt.Println("init packageList.db at", global.AppDataPath+"packageList.db")
 		e := packagelist.InitPackageList()
