@@ -69,10 +69,38 @@ func main() {
 		return
 	}
 
+	switch os.Args[i] {
+	case "test":
+		test()
+		return
+	}
+
 	// delete work lock should be here
 	if os.Args[i] == "purge" {
 		// do somethings
 		deleteWorkLock()
+		return
+	}
+
+	// handle commands that don't use packageList.db
+	switch os.Args[i] {
+	case "init":
+		fmt.Println("init packageList.db at", global.AppDataPath+"packageList.db")
+		e := packagelist.InitPackageList()
+		if e != nil {
+			fmt.Printf("error: %v\n", e)
+		}
+		return
+	case "selfInstall":
+		// need 1 arg, like: spm selfInstall [DIR]
+		if i+1 >= len(os.Args) {
+			fmt.Println("error: missing dir, u should run somethings like 'spm selfInstall [dir]'")
+			return
+		}
+		e := selfInstall(os.Args[i+1])
+		if e != nil {
+			fmt.Println("internal error:", e)
+		}
 		return
 	}
 
@@ -83,16 +111,6 @@ func main() {
 	}
 	defer deleteWorkLock()
 
-	// handle command
-	if os.Args[i] == "init" {
-		fmt.Println("init packageList.db at", global.AppDataPath+"packageList.db")
-		e := packagelist.InitPackageList()
-		if e != nil {
-			fmt.Printf("error: %v\n", e)
-		}
-		return
-	}
-
 	var pkgList packagelist.PackageList
 	e = pkgList.Open()
 	if e != nil {
@@ -100,4 +118,5 @@ func main() {
 		return
 	}
 	defer pkgList.Close()
+
 }

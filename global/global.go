@@ -11,13 +11,16 @@ var Prefix string = "/"
 var ExecutablePath = ""
 var AppDataPath = ""
 var CurrentRevision = 1
-var CurrentversionString = "alpha1"
+var CurrentVersionString = "alpha1"
 
 var LockFile *os.File
 
 const (
-	ERROR_PM_LOCKED = "ERROR_PM_LOCKED"
+	ERROR_PM_LOCKED        = "ERROR_PM_LOCKED"
+	APP_FILE_RESTRICT_PERM = 0711
 )
+
+// this is unsafe, we should change it
 
 var SchorlPMInfoTableDB string = fmt.Sprintf(`create table if not exists schorlPMInfoTable(revision int);
 insert into schorlPMInfoTable values (%v);
@@ -44,4 +47,4 @@ insert into schorlPackageTable values (
 	%v, 
 	"sysapp"
 );
-`, CurrentRevision, CurrentversionString, CurrentversionString, CurrentRevision)
+`, CurrentRevision, CurrentVersionString, CurrentVersionString, CurrentRevision)
