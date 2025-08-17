@@ -3,10 +3,30 @@ package main
 import (
 	global "Schorl/SchorlPackageManager/global"
 	packagelist "Schorl/SchorlPackageManager/packageList"
+	"Schorl/SchorlPackageManager/utils"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 )
+
+func createWorkLock() error {
+	lockPath := global.AppDataPath + "lock.txt"
+
+	if utils.IsFileExist(lockPath) {
+		fmt.Println("error: a lock.txt found, maybe I shouldn't do anythings")
+		return errors.New(global.ERROR_PM_LOCKED)
+	}
+
+	var e error
+	global.LockFile, e = os.Create(lockPath)
+
+	return e
+}
+
+func deleteWorkLock() {
+	os.Remove(global.AppDataPath + "lock.txt")
+}
 
 func main() {
 	// get some informations
@@ -26,6 +46,13 @@ func main() {
 
 	tmp = string(textRune) + "../appData/"
 	global.AppDataPath = tmp
+
+	// create work lock
+	e = createWorkLock()
+	if e != nil {
+		return
+	}
+	defer deleteWorkLock()
 
 	// get the first agrument
 	i := 1
